@@ -1,0 +1,86 @@
+<div class="ifs-browser">
+  <div class="toolbar">
+     <button 
+        class="btn btn-secondary" 
+        [disabled]="pathHistory.length === 0"
+        (click)="navigateBack()">
+        ← Back
+      </button>
+      <span class="current-path">{{ currentPath }}</span>
+
+      <button class="btn btn-secondary upload-btn" (click)="onUploadFile()">
+      Upload
+      </button>
+    </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    Loading files...
+  </div>
+
+  <div *ngIf="!loading && !showFileViewer" class="file-list">
+    <div class="file-grid">
+      <div 
+        *ngFor="let file of files" 
+        class="file-item"
+        [class.directory]="file.directory"
+        (dblclick)="navigateToFolder(file)">
+        
+        <div class="file-icon">{{ getFileIcon(file) }}</div>
+        <div class="file-details">
+          <div class="file-name">{{ file.name }}</div>
+          <div class="file-meta">
+            <span *ngIf="!file.directory">{{ formatFileSize(file.size) }}</span>
+            <span class="file-date">{{ file.lastModified }}</span>
+          </div>
+        </div>
+        
+        <div class="file-actions">
+          <button 
+            *ngIf="!file.directory" 
+            class="btn btn-sm btn-primary"
+            (click)="downloadFile(file)">
+            Download
+          </button>
+          <button 
+            *ngIf="file.type === 'csv' || file.type === 'excel'" 
+            class="btn btn-sm btn-success"
+            (click)="viewFile(file)">
+            View
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Excel Viewer Modal -->
+  <div *ngIf="showFileViewer" class="excel-viewer">
+  <div>
+    <div class="excel-header">
+      <h3>File Viewer</h3>
+      <button class="btn btn-secondary" (click)="closeExcelViewer()">Close</button>
+    </div>
+    
+    <div class="excel-content">
+      <div class="table-container">
+        <table class="excel-table">
+          <thead>
+            <tr>
+              <th *ngFor="let column of excelColumns">{{ column }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of excelData">
+              <td *ngFor="let column of excelColumns">{{ row[column] }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

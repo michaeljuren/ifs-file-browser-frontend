@@ -1,0 +1,246 @@
+.ifs-browser {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  gap: 15px;
+}
+
+.current-path {
+  font-family: monospace;
+  background: #f5f5f5;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  flex: 1; /* Takes remaining space */
+  overflow: hidden; /* Handle long paths */
+  text-overflow: ellipsis; /* Show ... for very long paths */
+  white-space: nowrap; /* Keep path on one line */
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px;
+}
+
+.spinner {
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #007bff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.file-grid {
+  display: grid;
+  gap: 15px;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.file-item:hover {
+  background: #f8f9fa;
+  border-color: #007bff;
+  transform: translateY(-1px);
+}
+
+.file-item.directory {
+  background: #e3f2fd;
+}
+
+.file-icon {
+  font-size: 24px;
+  margin-right: 15px;
+  width: 30px;
+  text-align: center;
+}
+
+.file-details {
+  flex-grow: 1;
+}
+
+.file-name {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.file-meta {
+  font-size: 12px;
+  color: #666;
+  display: flex;
+  gap: 10px;
+}
+
+.file-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.upload-btn {
+  background-color: #6c757d; /* Grey background */
+  border-color: #6c757d;
+  color: white;
+  flex-shrink: 0; /* Prevent button from shrinking */
+}
+
+.upload-btn:hover {
+  background-color: #5a6268; /* Darker grey on hover */
+  border-color: #545b62;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #1e7e34;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: #545b62;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-sm {
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+.alert {
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Excel Viewer Styles */
+.excel-viewer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.excel-viewer > div {
+  background: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 1000px;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+}
+
+.excel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.excel-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+.table-container {
+  height: 100%;
+  overflow: auto;
+  padding: 20px;
+}
+
+.excel-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.excel-table th,
+.excel-table td {
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.excel-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.excel-table tbody tr:nth-child(even) {
+  background: #f8f9fa;
+}
+
+.excel-table tbody tr:hover {
+  background: #e3f2fd;
+}
