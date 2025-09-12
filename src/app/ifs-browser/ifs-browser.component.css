@@ -173,8 +173,8 @@
   border: 1px solid #f5c6cb;
 }
 
-/* Excel Viewer Styles */
-.excel-viewer {
+/* File Viewer Styles */
+.file-viewer {
   position: fixed;
   top: 0;
   left: 0;
@@ -187,7 +187,7 @@
   z-index: 1000;
 }
 
-.excel-viewer > div {
+.file-viewer > div {
   background: white;
   border-radius: 8px;
   width: 90%;
@@ -197,7 +197,7 @@
   flex-direction: column;
 }
 
-.excel-header {
+.file-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -205,7 +205,7 @@
   border-bottom: 1px solid #ddd;
 }
 
-.excel-content {
+.file-content {
   flex: 1;
   overflow: hidden;
 }
@@ -216,20 +216,20 @@
   padding: 20px;
 }
 
-.excel-table {
+.file-table {
   width: 100%;
   border-collapse: collapse;
   background: white;
 }
 
-.excel-table th,
-.excel-table td {
+.file-table th,
+.file-table td {
   border: 1px solid #ddd;
   padding: 8px 12px;
   text-align: left;
 }
 
-.excel-table th {
+.file-table th {
   background: #f8f9fa;
   font-weight: 600;
   position: sticky;
@@ -237,10 +237,10 @@
   z-index: 10;
 }
 
-.excel-table tbody tr:nth-child(even) {
+.file-table tbody tr:nth-child(even) {
   background: #f8f9fa;
 }
 
-.excel-table tbody tr:hover {
+.file-table tbody tr:hover {
   background: #e3f2fd;
 }

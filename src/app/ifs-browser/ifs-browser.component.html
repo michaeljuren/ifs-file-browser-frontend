@@ -57,25 +57,25 @@
     </div>
   </div>
 
-  <!-- Excel Viewer Modal -->
-  <div *ngIf="showFileViewer" class="excel-viewer">
+  <!-- File Viewer Modal -->
+  <div *ngIf="showFileViewer" class="file-viewer">
   <div>
-    <div class="excel-header">
+    <div class="file-header">
       <h3>File Viewer</h3>
-      <button class="btn btn-secondary" (click)="closeExcelViewer()">Close</button>
+      <button class="btn btn-secondary" (click)="closeFileViewer()">Close</button>
     </div>
     
-    <div class="excel-content">
+    <div class="file-content">
       <div class="table-container">
-        <table class="excel-table">
+        <table class="file-table">
           <thead>
             <tr>
-              <th *ngFor="let column of excelColumns">{{ column }}</th>
+              <th *ngFor="let column of fileColumns">{{ column }}</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let row of excelData">
-              <td *ngFor="let column of excelColumns">{{ row[column] }}</td>
+            <tr *ngFor="let row of fileData">
+              <td *ngFor="let column of fileColumns">{{ row[column] }}</td>
             </tr>
           </tbody>
         </table>

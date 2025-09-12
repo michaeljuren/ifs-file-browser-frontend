@@ -19,9 +19,9 @@ export class IfsBrowserComponent implements OnInit {
   pathHistory: string[] = [];
   loading: boolean = false;
   error: string = '';
-  excelData: any[] = [];
+  fileData: any[] = [];
   showFileViewer: boolean = false;
-  excelColumns: string[] = [];
+  fileColumns: string[] = [];
 
   constructor(private ifsService: IfsService, private snackBar: MatSnackBar) { }
 
@@ -92,8 +92,8 @@ export class IfsBrowserComponent implements OnInit {
       this.loading = true;
       this.ifsService.readFile(file.path).subscribe({
         next: (data) => {
-          this.excelData = data;
-          this.excelColumns = data.length > 0 ? Object.keys(data[0]) : [];
+          this.fileData = data;
+          this.fileColumns = data.length > 0 ? Object.keys(data[0]) : [];
           this.showFileViewer = true;
           this.loading = false;
         },
@@ -105,10 +105,10 @@ export class IfsBrowserComponent implements OnInit {
     }
   }
 
-  closeExcelViewer(): void {
+  closeFileViewer(): void {
     this.showFileViewer = false;
-    this.excelData = [];
-    this.excelColumns = [];
+    this.fileData = [];
+    this.fileColumns = [];
   }
 
   formatFileSize(bytes: number): string {
