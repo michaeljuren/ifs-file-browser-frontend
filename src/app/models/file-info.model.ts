@@ -5,13 +5,6 @@ export interface FileInfo {
   lastModified: string;
   directory: boolean;
   type: string;
+  recentlyUploaded?: boolean;
 }
 
-export interface ExcelData {
-  [key: string]: string | number | boolean;
-}
-
-export interface BreadcrumbItem {
-  name: string;
-  path: string;
-}

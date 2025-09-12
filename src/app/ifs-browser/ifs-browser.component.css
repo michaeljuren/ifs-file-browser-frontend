@@ -244,3 +244,72 @@
 .file-table tbody tr:hover {
   background: #e3f2fd;
 }
+
+.file-item.recently-uploaded {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  border: 2px solid #28a745;
+  box-shadow: 0 0 20px rgba(40, 167, 69, 0.4);
+  animation: uploadGlow 3s ease-in-out;
+  position: relative;
+}
+
+@keyframes uploadGlow {
+  0% {
+    box-shadow: 0 0 25px rgba(40, 167, 69, 0.7);
+    transform: scale(1.05);
+    border-color: #20c997;
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(40, 167, 69, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.2);
+    transform: scale(1);
+    border-color: #28a745;
+  }
+}
+
+/* Smooth transition when highlight fades */
+.file-item {
+  transition: all 0.5s ease-in-out;
+}
+
+/* Success badge for uploaded files */
+.file-item.recently-uploaded::after {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #28a745;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: bold;
+  z-index: 10;
+  animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(-10px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+
+/* Enhanced file icon for recently uploaded files */
+.file-item.recently-uploaded .file-icon {
+  color: #28a745;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(40, 167, 69, 0.5);
+}
+
+/* Optional: Pulse effect for extra attention */
+.file-item.recently-uploaded .file-name {
+  color: #155724;
+  font-weight: 600;
+}
+
+/* Ensure proper stacking context */
+.file-item.recently-uploaded {
+  z-index: 5;
+}

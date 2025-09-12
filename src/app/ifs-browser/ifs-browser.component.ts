@@ -3,6 +3,8 @@ import { FileInfo } from '../models/file-info.model';
 import { IfsService } from '../services/ifs.service';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-ifs-browser',
@@ -22,6 +24,8 @@ export class IfsBrowserComponent implements OnInit {
   fileData: any[] = [];
   showFileViewer: boolean = false;
   fileColumns: string[] = [];
+  private uploadedFileName: string | null = null;
+  private highlightTimeout: any;
 
   constructor(private ifsService: IfsService, private snackBar: MatSnackBar) { }
 
@@ -29,26 +33,71 @@ export class IfsBrowserComponent implements OnInit {
     this.loadFiles(this.currentPath);
   }
 
-  loadFiles(path: string): void {
+  loadFiles(path: string, uploadedFileName?: string): void {
     this.loading = true;
     this.error = '';
     this.showFileViewer = false;
     
+    // Store the uploaded filename if provided
+    if (uploadedFileName) {
+    this.uploadedFileName = uploadedFileName;
+    }
+
     this.ifsService.listFiles(path).subscribe({
-      next: (files) => {
-        this.files = files.sort((a, b) => {
-          // Directories first, then files
-          if (a.directory && !b.directory) return -1;
-          if (!a.directory && b.directory) return 1;
-          return a.name.localeCompare(b.name);
-        });
-        this.loading = false;
-      },
-      error: (error) => {
-        this.error = 'Failed to load files: ' + error.message;
-        this.loading = false;
+    next: (files) => {
+      let sortedFiles = files.sort((a, b) => {
+        // Directories first, then files
+        if (a.directory && !b.directory) return -1;
+        if (!a.directory && b.directory) return 1;
+        return a.name.localeCompare(b.name);
+      });
+      
+      // If we have an uploaded file, move it to the top and mark it for highlighting
+      if (this.uploadedFileName) {
+        const uploadedFileIndex = sortedFiles.findIndex(file => 
+          file.name === this.uploadedFileName && !file.directory
+        );
+        
+        if (uploadedFileIndex > -1) {
+          // Remove the uploaded file from its current position
+          const uploadedFile = sortedFiles.splice(uploadedFileIndex, 1)[0];
+          
+          // Add a property to mark it as recently uploaded
+          uploadedFile.recentlyUploaded = true;
+          
+          // Find the first non-directory position to insert the uploaded file
+          let insertPosition = 0;
+          while (insertPosition < sortedFiles.length && sortedFiles[insertPosition].directory) {
+            insertPosition++;
+          }
+          
+          // Insert the uploaded file at the top of the files section (after directories)
+          sortedFiles.splice(insertPosition, 0, uploadedFile);
+          
+          // Clear the highlight after 3 seconds
+          if (this.highlightTimeout) {
+            clearTimeout(this.highlightTimeout);
+          }
+          
+          this.highlightTimeout = setTimeout(() => {
+            const fileIndex = this.files.findIndex(f => f.name === this.uploadedFileName);
+            if (fileIndex > -1) {
+              this.files[fileIndex].recentlyUploaded = false;
+            }
+            this.uploadedFileName = null;
+          }, 2000);
+        }
       }
-    });
+      
+      this.files = sortedFiles;
+      this.loading = false;
+    },
+    error: (error) => {
+      this.error = 'Failed to load files: ' + error.message;
+      this.loading = false;
+    }
+  });
+    
   }
 
   navigateToFolder(file: FileInfo): void {
@@ -146,7 +195,7 @@ export class IfsBrowserComponent implements OnInit {
 }
 
 // Upload file with validation
-private uploadFile(file: File): void {
+private uploadFile(file: File): void{
   const fileName = file.name;
   
   // Validate filename length
@@ -164,8 +213,8 @@ private uploadFile(file: File): void {
     return;
   }
   
-  // Show loading indicator (optional)
-  //this.loading = true;
+  // Show loading indicator 
+  this.loading = true;
   
   // Prepare form data
   const formData = new FormData();
@@ -174,21 +223,18 @@ private uploadFile(file: File): void {
   
   // Call your upload service
   this.ifsService.uploadFile(formData).subscribe({
-    next: (response) => {
-       this.snackBar.open(
-      `File "${fileName}" uploaded successfully!`,
-      'Close',
-      {
-        duration: 3000,
-        horizontalPosition: 'right',
-        verticalPosition: 'top'
-      }
-    );
-      
-      // Refresh the file list to show the new file
-      this.loadFiles(this.currentPath);
+    next: (event) => {
+    if (event.type === HttpEventType.Response) {
+      console.log("uploaded"); // only once
+      this.snackBar.open(
+        `File "${fileName}" uploaded successfully!`,
+        'Close',
+        { duration: 2000, horizontalPosition: 'right', verticalPosition: 'top' }
+      );
+      this.loadFiles(this.currentPath, fileName);
       this.loading = false;
-    },
+    }
+  },
     error: (error) => {
       console.error('Upload failed:', error);
       let errorMessage = 'Failed to upload file.';
@@ -204,4 +250,10 @@ private uploadFile(file: File): void {
     }
   });
 }
+
+ngOnDestroy(): void {
+  if (this.highlightTimeout) {
+    clearTimeout(this.highlightTimeout);
+  }
+}  
 }
